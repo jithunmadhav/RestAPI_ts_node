@@ -1,19 +1,22 @@
-import dbconnect from './dbConnection';
-import express from 'express'
+import express from 'express';
+import 'dotenv/config';
+import { getUser } from './database/user';
 
-const app=express()
+const app = express();
 
-app.get('/',(req,res)=>{
+app.use(express.json());
 
-    dbconnect.query('SELECT * FROM sample', (error, results, fields) => {
-        if (error) {
-          console.error(error);
-        } else {
-          console.log(results);
-          res.json(results)
-        }
-      });
-})
-app.listen(4000,()=>{
-    console.log('http://localhost:4000');
-})
+app.get('/', async (req, res) => { // Make the route handler async
+  try {
+    let result = await getUser(); // Wait for the getUser function to complete
+    console.log(result);
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.listen(4000, () => {
+  console.log('http://localhost:4000');
+});
