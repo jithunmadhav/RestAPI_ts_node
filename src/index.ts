@@ -1,6 +1,6 @@
 import express from 'express';
 import 'dotenv/config';
-import { createUser, getUser, updateUser } from './database/user';
+import { createUser, getDetails, getUser, updateUser } from './database/user';
 import bodyParser from 'body-parser';
 
 const app = express();
@@ -19,7 +19,7 @@ app.get('/', async (req, res) => {
   }
 });
 
-app.post('/user',(req,res)=>{
+app.post('/add',(req,res)=>{
   const {email,username,password}:{email:string; username:string; password:string}=req.body;
   if(! email || !username || !password){
     return res.status(400).json('error')
@@ -39,6 +39,16 @@ app.put('/update',(req,res)=>{
     res.status(500).json({message:'error',err})
   })
 })
+
+app.get('/details',(req,res)=>{
+  const {email}:{email:string}=req.body;
+  getDetails(email).then((result)=>{
+    res.status(200).json({result})
+  }).catch((err)=>{
+    res.status(500).json(err)
+  })
+})
+
 
 app.listen(4000, () => {
   console.log('http://localhost:4000');
