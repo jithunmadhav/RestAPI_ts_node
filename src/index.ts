@@ -1,6 +1,6 @@
 import express from 'express';
 import 'dotenv/config';
-import { createUser, getUser } from './database/user';
+import { createUser, getUser, updateUser } from './database/user';
 import bodyParser from 'body-parser';
 
 const app = express();
@@ -28,6 +28,15 @@ app.post('/user',(req,res)=>{
   res.status(200).json('successfull')
   }).catch((err)=>{
     console.log(err);
+  })
+})
+
+app.put('/update',(req,res)=>{
+  const {email,username,password}:{email:string,username:string,password:string}=req.body;
+  updateUser(username,password,email).then((result)=>{
+    res.status(200).json({result,message:'update successfull'})
+  }).catch((err)=>{
+    res.status(500).json({message:'error',err})
   })
 })
 
