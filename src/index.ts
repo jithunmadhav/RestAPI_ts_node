@@ -33,7 +33,7 @@ app.post('/user',(req,res)=>{
 
 app.put('/update',(req,res)=>{
   const {email,username,password}:{email:string,username:string,password:string}=req.body;
-  updateUser(username,password,email).then((result)=>{
+  updateUser(email,username,password).then((result)=>{
     res.status(200).json({result,message:'update successfull'})
   }).catch((err)=>{
     res.status(500).json({message:'error',err})
